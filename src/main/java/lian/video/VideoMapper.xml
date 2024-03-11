@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        namespace=绑定一个Dao/Mapper接口-->
+<mapper namespace="lian.video.VideoMapper">
+<!--    <select id="viewVideo" parameterType="int" resultType="lian.video.Video">-->
+<!--        select * from work4.video where videoId =#{videoId}-->
+<!--    </select>-->
+
+    <insert id="uploadVideo" parameterType="lian.video.Video">
+        INSERT INTO work4.video (videoId, videoUrl, description, uploadTime, viewsCount, userId)
+        VALUES (#{videoId}, #{videoUrl}, #{description}, #{uploadTime}, #{viewsCount}, #{userId})
+    </insert>
+
+    <update id="viewVideo">
+        UPDATE work4.video
+        SET viewsCount = viewsCount + 1
+        WHERE videoId = #{videoId}
+    </update>
+
+    <delete id="deleteVideoById" parameterType="int">
+        delete from work4.video where videoId=#{videoId};
+    </delete>
+    <delete id="deleteCommentsByVideoId" parameterType="int">
+        delete from work4.comment where videoId=#{videoId};
+    </delete>
+
+    <select id="sortByViewsCount" parameterType="int" resultType="lian.video.Video">
+        SELECT *
+        FROM work4.video
+        ORDER BY viewsCount DESC
+    </select>
+
+    <select id="sortByuploadTime" parameterType="int" resultType="lian.video.Video">
+        SELECT *
+        FROM work4.video
+        ORDER BY uploadTime DESC
+    </select>
+</mapper>

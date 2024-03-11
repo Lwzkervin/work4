@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        namespace=绑定一个Dao/Mapper接口-->
+<mapper namespace="lian.user.UserMapper">
+
+    <resultMap id="UserMap" type="lian.user.User">
+        <!-- 映射字段与实体类属性 -->
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="avatar_url" column="avatar_url"/>
+
+    </resultMap>
+
+    <select id="getUserById" parameterType="int" resultType="lian.user.User">
+        select * from work4.user where id =#{id}
+    </select>
+    <!--    对象中的属性可以直接取出来-->
+    <insert id="addUser" parameterType="lian.user.User" >
+        insert into work4.user(id,username,password,email,avatar_url) values (#{id},#{username},#{password},#{email},#{avatar_url});
+    </insert>
+    <!--    分页-->
+    <select id="getUserByLimit" parameterType="map" resultMap="UserMap">
+        select * from work4.user limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getUserList" resultType="lian.user.User">
+        select * from work4.user
+    </select>
+
+    <update id="updateUser" parameterType="lian.user.User">
+        update work4.user set username=#{username},password=#{password},email=#{email},avatar_url=#{avatar_url} where id=#{id};
+    </update>
+
+    <update id="updateAvatar_url" parameterType="lian.user.User">
+        update work4.user set avatar_url=#{avatar_url} where id=#{id};
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from work4.user where id=#{id};
+    </delete>
+</mapper>
+

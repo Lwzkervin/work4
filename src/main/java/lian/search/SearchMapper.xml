@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        namespace=绑定一个Dao/Mapper接口-->
+<mapper namespace="lian.search.SearchMapper">
+    <select id="searchUserById" parameterType="int" resultType="lian.user.User">
+        select * from work4.user where id =#{userId}
+    </select>
+
+    <select id="searchUserByVideoId" parameterType="int" resultType="lian.video.Video">
+        select * from work4.video where videoId =#{videoId}
+    </select>
+
+    <select id="searchUserByYear" parameterType="int" resultType="lian.video.Video">
+        SELECT *
+        FROM work4.video
+        WHERE YEAR(uploadTime) = #{year};
+    </select>
+
+    <select id="searchUserByType" parameterType="String" resultType="lian.video.Video">
+        select * from work4.video where type =#{type}
+    </select>
+
+    <select id="searchUserByTime" parameterType="LocalDateTime" resultType="lian.video.Video">
+        select * from work4.video
+        where uploadTime =#{uploadTime}
+    </select>
+
+    <insert id="insertHistory" parameterType="lian.search.SearchHistory">
+        INSERT INTO work4.searchhistory (userId, searchKeyword, searchTime)
+        VALUES (#{userId}, #{searchKeyword}, #{searchTime})
+    </insert>
+</mapper>

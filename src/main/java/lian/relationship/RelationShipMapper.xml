@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        namespace=绑定一个Dao/Mapper接口-->
+<mapper namespace="lian.relationship.RelationShipMapper">
+<!--    <resultMap id="RelationshipMap" type="lian.relationship.RelationShip">-->
+<!--        &lt;!&ndash; 映射字段与实体类属性 &ndash;&gt;-->
+<!--        <result property="userId" column="userId"/>-->
+<!--        <result property="followedUserId" column="followedUserId"/>-->
+<!--    </resultMap>-->
+
+    <insert id="addFollow" parameterType="lian.relationship.RelationShip" >
+        insert into work4.relationship(userId,followedUserId) values (#{userId},#{followedUserId});
+    </insert>
+
+    <delete id="deleteFollow" parameterType="lian.relationship.RelationShip">
+        DELETE FROM work4.relationship
+        WHERE userId = #{userId} AND followedUserId = #{followedUserId};
+    </delete>
+
+    <select id="getFollowersList" resultType="lian.user.User">
+        SELECT u.*
+        FROM user u
+        INNER JOIN relationship r ON u.id = r.userId
+        WHERE r.followedUserId = #{userId}
+    </select>
+
+    <select id="getFollowingList" resultType="lian.user.User">
+        SELECT u.*
+        FROM user u
+        INNER JOIN relationship r ON u.id = r.followedUserId
+        WHERE r.UserId = #{userId}
+    </select>
+
+    <select id="getFriendsList" resultType="lian.user.User">
+        SELECT DISTINCT u.*
+        FROM user u
+        INNER JOIN (
+        -- 用户A关注的用户
+        SELECT r1.followedUserId AS mutual_follower
+        FROM relationship r1
+        WHERE r1.userId = #{targetUserId}
+
+        UNION
+
+        -- 关注用户A的用户
+        SELECT r2.userId AS mutual_follower
+        FROM relationship r2
+        WHERE r2.followedUserId = #{targetUserId}
+        ) AS mutual_relations
+        ON u.id = mutual_relations.mutual_follower
+        WHERE EXISTS (
+        -- 用户A与该用户存在双向关注关系
+        SELECT 1
+        FROM relationship r3
+        WHERE (r3.userId = #{targetUserId} AND r3.followedUserId = u.id)
+        OR (r3.userId = u.id AND r3.followedUserId = #{targetUserId})
+        )
+    </select>
+
+</mapper>

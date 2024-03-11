@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        namespace=绑定一个Dao/Mapper接口-->
+<mapper namespace="lian.comment.CommentMapper">
+
+    <insert id="addComment" parameterType="lian.video.Video">
+        INSERT INTO work4.comment (videoId, userId, commentText, commentTime)
+        VALUES (#{videoId}, #{userId}, #{commentText}, #{commentTime})
+    </insert>
+
+    <insert id="replyComment" parameterType="lian.video.Video">
+        INSERT INTO work4.comment (videoId, userId, commentText, parentCommentId, commentTime)
+        VALUES (#{videoId}, #{userId}, #{commentText}, #{parentCommentId},#{commentTime})
+    </insert>
+
+
+</mapper>
